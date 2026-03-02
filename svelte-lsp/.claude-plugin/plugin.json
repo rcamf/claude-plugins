@@ -1,0 +1,9 @@
+{
+  "name": "svelte-lsp",
+  "version": "0.1.0",
+  "description": "Svelte language server integration for Claude Code. Provides diagnostics, code navigation, completions, and refactoring for Svelte components.",
+  "author": {
+    "name": "rcamf"
+  },
+  "keywords": ["svelte", "lsp", "sveltekit"]
+}

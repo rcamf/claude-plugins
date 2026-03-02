@@ -1,0 +1,9 @@
+{
+  "name": "tsgo-lsp",
+  "version": "0.1.0",
+  "description": "TypeScript-Go (tsgo) LSP integration for Claude Code. Provides type checking, code navigation, symbol search, refactoring, and formatting via the native TypeScript compiler.",
+  "author": {
+    "name": "rcamf"
+  },
+  "keywords": ["typescript", "lsp", "tsgo", "type-checking"]
+}

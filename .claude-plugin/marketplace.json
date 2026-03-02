@@ -1,0 +1,20 @@
+{
+  "name": "rcamf-claude-plugins",
+  "description": "Personal Claude Code plugin marketplace",
+  "version": "0.1.0",
+  "owner": {
+    "name": "rcamf"
+  },
+  "plugins": [
+    {
+      "name": "tsgo-lsp",
+      "source": "./tsgo-lsp",
+      "description": "TypeScript-Go (tsgo) LSP integration for type checking, code navigation, and refactoring"
+    },
+    {
+      "name": "svelte-lsp",
+      "source": "./svelte-lsp",
+      "description": "Svelte language server integration for diagnostics, code navigation, and refactoring"
+    }
+  ]
+}

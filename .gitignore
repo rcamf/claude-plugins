@@ -1,0 +1,4 @@
+node_modules/
+.claude/*.local.md
+.DS_Store
+*.log
