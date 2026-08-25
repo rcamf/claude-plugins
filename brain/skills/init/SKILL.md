@@ -42,10 +42,18 @@ Use only plain `git` — do not assume `gh` or any other forge CLI is installed.
 
      If they'd rather skip the remote for now, that's fine — the vault works
      locally; remind them it won't sync until they add one.
-3. **Persist BRAIN_VAULT**: append to the user's shell profile
-   (`export BRAIN_VAULT="<absolute path>"`). Pick the right file: honor
-   `$ZDOTDIR` if set (`$ZDOTDIR/.zshrc`), else `~/.zshrc` for zsh or `~/.bashrc`
-   for bash (check `$SHELL`). Skip if an identical line exists.
+3. **Persist BRAIN_VAULT** in BOTH places:
+   - **Shell profile**: append `export BRAIN_VAULT="<absolute path>"`. Pick the
+     right file: honor `$ZDOTDIR` if set (`$ZDOTDIR/.zshrc`), else `~/.zshrc`
+     for zsh or `~/.bashrc` for bash (check `$SHELL`). Skip if an identical line
+     exists.
+   - **Claude Code settings**, so sessions get it even when the profile isn't
+     sourced: merge `{"env": {"BRAIN_VAULT": "<absolute path>"}}` into
+     `${CLAUDE_CONFIG_DIR:-$HOME/.claude}/settings.json` — read the file if it
+     exists and add/update only the `env.BRAIN_VAULT` key, never overwrite other
+     settings (use python3/jq for the JSON merge, and create the file with just
+     that env block if missing). If the user runs multiple Claude config dirs,
+     offer to update each.
 4. **Verify**: confirm the path contains `CLAUDE.md` and `Home.md`.
 5. Report: the vault path, its remote (or that none is set), and suggest opening
    the folder as a vault in Obsidian. Note that `BRAIN_VAULT` takes effect in new
