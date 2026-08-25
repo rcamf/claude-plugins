@@ -1,13 +1,15 @@
 ---
 name: session
-description: Keep this session's working memory in the brAIn vault instead of the repo or worktree. Use whenever you are about to create a plan, notes, design doc, decision log, or any scratch markdown that is not a project deliverable — write it under the vault's sessions/ area instead of the working tree. Also use when the user says "note this down", "keep session notes in the brain", or asks where session docs should go.
+description: Mirror this session's working docs (plans, notes, design docs, decision logs) into the brAIn vault's sessions/ area so they are browsable in Obsidian and synced across machines. Use whenever creating or updating a scratch/planning markdown doc in a repo or worktree — keep the worktree copy AND mirror it to the vault. Also use when the user says "note this down" or "add session notes to the brain".
 ---
 
-# /brain:session — per-session working memory in the vault
+# /brain:session — mirror session working memory into the vault
 
-Sessions must not litter repos and worktrees with PLAN.md / NOTES.md style docs.
-That material is memory, and memory lives in the brAIn vault under a per-session
-folder: `sessions/<slug>/`.
+Working docs (PLAN.md, NOTES.md, design sketches, decision logs) are created in
+the repo/worktree exactly as usual — that stays the working copy. This skill
+ADDS a synced copy in the brAIn vault under `sessions/<slug>/`, so every
+session's memory is browsable in Obsidian and available on other machines.
+Never delete or relocate the worktree originals.
 
 ```bash
 VAULT="$BRAIN_VAULT"
@@ -34,11 +36,24 @@ SLUG=$(printf '%s' "$SLUG" | tr '/ ' '--')
 1. **Sync first**: `git -C "$VAULT" pull --rebase --quiet` (tolerate failure —
    work locally, mention it).
 2. **Create/reuse** `"$VAULT/sessions/$SLUG/"`. On first use, create `log.md`
-   there with a header noting the repo path, branch, and start date (absolute,
-   e.g. 2026-08-25).
-3. **Write the doc** into that folder:
-   - Running notes, decisions, findings → append dated entries to `log.md`.
-   - Substantial docs (a plan, a design) → their own file, e.g. `plan.md`.
+   there with frontmatter matching the vault's `templates/Session log.md`
+   template — real values, not `{{placeholders}}`:
+
+   ```markdown
+   ---
+   tags: [session]
+   repo: <absolute repo/worktree path>
+   branch: <branch>
+   started: <YYYY-MM-DD>
+   ---
+   ```
+
+   (The frontmatter feeds the vault's `Sessions.base` overview.)
+3. **Mirror the docs**:
+   - Scratch/planning docs created in the worktree → copy them into the session
+     folder, and re-copy whenever they change meaningfully. Same filename.
+   - Running notes, decisions, findings with no worktree file → append dated
+     entries to `log.md`.
    - Wikilink to main vault notes (`[[Topic]]`) where relevant — that's what
      makes later consolidation easy.
 4. **Do NOT promote anything into the main vault.** Session folders are working
@@ -51,11 +66,13 @@ SLUG=$(printf '%s' "$SLUG" | tr '/ ' '--')
 ## Standing rule for the session
 
 Once this skill has been used, keep following it for the rest of the session:
-every subsequent scratch/planning doc goes to the same session folder, never the
-working tree. Project deliverables (code, README changes, docs that ship with the
-repo) still belong in the repo.
+whenever a scratch/planning doc is created or substantially updated in the
+worktree, mirror it to the session folder. Project deliverables (code, README
+changes, docs that ship with the repo) live only in the repo — don't mirror
+those.
 
 ## Arguments
 
-`$ARGUMENTS` optionally describes what to write down. If empty, write down the
-session's current state: what it's doing, decisions so far, open questions.
+`$ARGUMENTS` optionally describes what to write down. If empty, mirror any
+existing session docs from the worktree and record the session's current state:
+what it's doing, decisions so far, open questions.
