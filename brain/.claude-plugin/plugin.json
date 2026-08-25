@@ -1,0 +1,9 @@
+{
+  "name": "brain",
+  "version": "0.1.0",
+  "description": "Persistent memory vault for humans and AI: an Obsidian-compatible markdown repo synced via git. /brain:init sets one up from the brAIn template, /brain:remember captures knowledge, /brain:recall retrieves it.",
+  "author": {
+    "name": "rcamf"
+  },
+  "keywords": ["memory", "obsidian", "notes", "knowledge-base", "pkm"]
+}

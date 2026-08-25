@@ -15,6 +15,11 @@
       "name": "svelte-lsp",
       "source": "./svelte-lsp",
       "description": "Svelte language server integration for diagnostics, code navigation, and refactoring"
+    },
+    {
+      "name": "brain",
+      "source": "./brain",
+      "description": "Persistent memory vault for humans and AI: Obsidian-compatible markdown repo synced via git, with init/remember/recall skills"
     }
   ]
 }
