@@ -5,42 +5,39 @@ description: Save a fact, idea, or note into the user's brAIn vault (their Obsid
 
 # /brain:remember — capture into the brAIn vault
 
-The vault is a git-synced Obsidian vault at `$BRAIN_VAULT`:
+All vault mechanics go through the plugin's helper CLI, `scripts/brain.sh` at
+the plugin root (two directories above this skill's base directory):
 
 ```bash
-VAULT="$BRAIN_VAULT"
+BRAIN="<this skill's base directory>/../../scripts/brain.sh"
+VAULT=$("$BRAIN" vault)
 ```
 
-If `BRAIN_VAULT` is unset or the directory is missing, stop and tell the user to
-run `/brain:init`. Notes are plain Markdown, one topic per file, linked with
-`[[wikilinks]]`. Read the vault's `CLAUDE.md` if you need the full conventions.
+If `vault` fails, stop and relay its message (the fix is `/brain:init`).
+Notes are plain Markdown, one topic per file, linked with `[[wikilinks]]`.
+Read the vault's `CLAUDE.md` if you need the full conventions.
 
 ## Steps
 
-1. **Sync first**: `git -C "$VAULT" pull --rebase --quiet`. If it fails (offline,
-   conflict), continue working locally and mention it at the end.
-2. **Search before writing**: `rg -il '<topic terms>' "$VAULT" --glob '*.md'` and
-   check filenames (`ls`) for an existing note on the topic. Prefer updating an
-   existing note over creating a near-duplicate.
+1. **Sync**: `"$BRAIN" sync` (if it reports working locally, mention that at
+   the end).
+2. **Search before writing**: `"$BRAIN" search <term>...` — try synonyms too.
+   Prefer updating an existing note over creating a near-duplicate.
 3. **Write the note**:
-   - New topic → new file, filename is the title: `Topic name.md`.
-   - **Default to the current repo's area.** Derive the repo from where the
-     session is running (`git rev-parse --show-toplevel`, folder basename) and
-     place the note in that project's area folder (e.g. `PadelReplay/`),
-     creating it if needed — reuse an existing folder that matches the project
-     loosely. Use a different area only when the fact is clearly unrelated to
-     the current repo (or there is no repo context); then pick the best-fitting
-     general area folder. Never save a note at the vault root unless the user
+   - **Default to the current repo's area**: `AREA=$("$BRAIN" area)` resolves
+     (or creates) the area folder for the repo the session is running in. Only
+     place the note elsewhere when the fact is clearly unrelated to the current
+     repo (or there is no repo context); then pick the best-fitting general
+     area folder. Never save a note at the vault root unless the user
      explicitly asks.
-   - Add `[[wikilinks]]` to related existing notes; links to not-yet-existing notes
-     are fine and encouraged.
+   - New topic → new file, filename is the title: `Topic name.md`.
+   - Add `[[wikilinks]]` to related existing notes; links to not-yet-existing
+     notes are fine and encouraged.
    - Use absolute dates (e.g. 2026-08-25), never relative ones.
    - Quick unstructured capture with no obvious home → append to `Inbox.md`.
-4. **Keep the graph connected**: if you created a new top-level area, link it from
+4. **Keep the graph connected**: if you created a new area folder, link it from
    `Home.md`.
-5. **Commit and push**:
-   `git -C "$VAULT" add -A && git -C "$VAULT" commit -m "<what changed>" && git -C "$VAULT" push`.
-   If push fails, leave the commit and tell the user it will sync next time.
+5. **Save**: `"$BRAIN" save "<what changed>"`.
 6. Report which note was created/updated, in one or two sentences.
 
 ## Arguments

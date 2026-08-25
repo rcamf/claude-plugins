@@ -5,29 +5,28 @@ description: Search the user's brAIn vault (their Obsidian-style markdown knowle
 
 # /brain:recall — retrieve from the brAIn vault
 
-The vault is a git-synced Obsidian vault at `$BRAIN_VAULT`:
+All vault mechanics go through the plugin's helper CLI, `scripts/brain.sh` at
+the plugin root (two directories above this skill's base directory):
 
 ```bash
-VAULT="$BRAIN_VAULT"
+BRAIN="<this skill's base directory>/../../scripts/brain.sh"
+VAULT=$("$BRAIN" vault)
 ```
 
-If `BRAIN_VAULT` is unset or the directory is missing, stop and tell the user to
-run `/brain:init`. Notes are plain Markdown, one topic per file, connected with
-`[[wikilinks]]`.
+If `vault` fails, stop and relay its message (the fix is `/brain:init`).
 
 ## Steps
 
-1. **Sync first**: `git -C "$VAULT" pull --rebase --quiet` (ignore failures —
-   answer from the local copy and note it wasn't refreshed).
-2. **Search broadly**: filenames first (`ls "$VAULT"/*.md`), then content:
-   `rg -il '<term>' "$VAULT" --glob '*.md'`. Try synonyms if the first term
-   misses.
-3. **Read the matching notes** and follow `[[wikilinks]]` one hop when they look
-   relevant to the question.
+1. **Sync**: `"$BRAIN" sync` (if it reports working locally, note the answer
+   may be slightly stale).
+2. **Search broadly**: `"$BRAIN" search <term>...` — it matches filenames and
+   content. Try synonyms if the first terms miss.
+3. **Read the matching notes** and follow `[[wikilinks]]` one hop when they
+   look relevant to the question.
 4. **Answer from the vault**, naming the notes the answer came from (e.g. "from
    [[Postgres tuning]]"). If the vault has nothing, say so plainly — don't pad
    with general knowledge unless the user wants it.
-5. Read-only by default: do not modify or commit anything during recall.
+5. Read-only: do not modify or commit anything during recall.
 
 ## Arguments
 

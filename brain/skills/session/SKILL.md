@@ -7,61 +7,36 @@ description: Mirror this session's working docs (plans, notes, design docs, deci
 
 Working docs (PLAN.md, NOTES.md, design sketches, decision logs) are created in
 the repo/worktree exactly as usual — that stays the working copy. This skill
-ADDS a synced copy in the brAIn vault under `sessions/<slug>/`, so every
-session's memory is browsable in Obsidian and available on other machines.
-Never delete or relocate the worktree originals.
+ADDS a synced copy in the brAIn vault, so every session's memory is browsable
+in Obsidian and available on other machines. Never delete or relocate the
+worktree originals.
+
+All vault mechanics go through the plugin's helper CLI, `scripts/brain.sh` at
+the plugin root (two directories above this skill's base directory):
 
 ```bash
-VAULT="$BRAIN_VAULT"
+BRAIN="<this skill's base directory>/../../scripts/brain.sh"
+DIR=$("$BRAIN" session-dir)   # ensures sessions/<slug>/ with a frontmattered log.md
 ```
 
-If `BRAIN_VAULT` is unset or the directory is missing, stop and tell the user to
-run `/brain:init`.
-
-## Session slug
-
-Derive it from where the session is working, and reuse the same folder for the
-whole session (and for later sessions in the same worktree/branch):
-
-```bash
-ROOT=$(git rev-parse --show-toplevel 2>/dev/null) || ROOT=$PWD
-BRANCH=$(git -C "$ROOT" branch --show-current 2>/dev/null)
-SLUG=$(basename "$ROOT")
-case "$BRANCH" in ""|main|master) ;; *) SLUG="$SLUG-$BRANCH";; esac
-SLUG=$(printf '%s' "$SLUG" | tr '/ ' '--')
-```
+If it fails, stop and relay its message (the fix is `/brain:init`).
+`session-dir` derives the slug from the current repo/worktree and branch and
+seeds `log.md` with the frontmatter that feeds the vault's `Sessions.base`.
 
 ## Steps
 
-1. **Sync first**: `git -C "$VAULT" pull --rebase --quiet` (tolerate failure —
-   work locally, mention it).
-2. **Create/reuse** `"$VAULT/sessions/$SLUG/"`. On first use, create `log.md`
-   there with frontmatter matching the vault's `templates/Session log.md`
-   template — real values, not `{{placeholders}}`:
-
-   ```markdown
-   ---
-   tags: [session]
-   repo: <absolute repo/worktree path>
-   branch: <branch>
-   started: <YYYY-MM-DD>
-   ---
-   ```
-
-   (The frontmatter feeds the vault's `Sessions.base` overview.)
-3. **Mirror the docs**:
-   - Scratch/planning docs created in the worktree → copy them into the session
-     folder, and re-copy whenever they change meaningfully. Same filename.
+1. **Sync**: `"$BRAIN" sync` (tolerate a local-only result; mention it).
+2. **Mirror into `$DIR`**:
+   - Scratch/planning docs created in the worktree → copy them into `$DIR`,
+     same filename; re-copy whenever they change meaningfully.
    - Running notes, decisions, findings with no worktree file → append dated
-     entries to `log.md`.
-   - Wikilink to main vault notes (`[[Topic]]`) where relevant — that's what
-     makes later consolidation easy.
-4. **Do NOT promote anything into the main vault.** Session folders are working
-   memory; moving knowledge into topic notes happens only via `/brain:consolidate`
-   when the user explicitly asks.
-5. **Commit and push**:
-   `git -C "$VAULT" add -A && git -C "$VAULT" commit -m "session $SLUG: <what>" && git -C "$VAULT" push`
-   (if push fails, leave the commit; it syncs later).
+     entries to `$DIR/log.md`.
+   - Wikilink to vault notes (`[[Topic]]`) where relevant — that's what makes
+     later consolidation easy.
+3. **Do NOT promote anything into the main vault.** Session folders are working
+   memory; moving knowledge into topic notes happens only via
+   `/brain:consolidate` when the user explicitly asks.
+4. **Save**: `"$BRAIN" save "session $("$BRAIN" slug): <what>"`.
 
 ## Standing rule for the session
 

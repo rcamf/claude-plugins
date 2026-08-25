@@ -54,7 +54,10 @@ Use only plain `git` — do not assume `gh` or any other forge CLI is installed.
      settings (use python3/jq for the JSON merge, and create the file with just
      that env block if missing). If the user runs multiple Claude config dirs,
      offer to update each.
-4. **Verify**: confirm the path contains `CLAUDE.md` and `Home.md`.
+4. **Verify** with the plugin's helper CLI (`scripts/brain.sh` at the plugin
+   root, two directories above this skill's base directory):
+   `BRAIN_VAULT="<absolute path>" <plugin root>/scripts/brain.sh vault` must
+   print the path, and the path must contain `CLAUDE.md` and `Home.md`.
 5. Report: the vault path, its remote (or that none is set), and suggest opening
    the folder as a vault in Obsidian. Note that `BRAIN_VAULT` takes effect in new
    shells/sessions.

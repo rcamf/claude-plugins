@@ -9,30 +9,32 @@ Produces a durable, browsable map of a codebase inside the brAIn vault: what it
 is, how it's shaped, and the decisions baked into it — the things a person (or a
 future session) needs to get oriented without re-reading the code.
 
+All vault mechanics go through the plugin's helper CLI, `scripts/brain.sh` at
+the plugin root (two directories above this skill's base directory):
+
 ```bash
-VAULT="$BRAIN_VAULT"
+BRAIN="<this skill's base directory>/../../scripts/brain.sh"
+VAULT=$("$BRAIN" vault)
 ```
 
-If `BRAIN_VAULT` is unset or the directory is missing, stop and tell the user to
-run `/brain:init`.
+If `vault` fails, stop and relay its message (the fix is `/brain:init`).
 
 ## Target repo
 
-`$ARGUMENTS` may name a path; otherwise use the current repo
-(`git rev-parse --show-toplevel`, falling back to `$PWD`). Slug = directory
-basename. Record the current commit (`git rev-parse --short HEAD`) so the notes
-say what state they describe.
+`$ARGUMENTS` may name a path; otherwise use the current repo. The repo's notes
+live in its area folder: `AREA=$("$BRAIN" area [path])` resolves an existing
+area folder by loose name match (e.g. `PadelReplay/` for repo `padel-replay`)
+or creates one. Record the current commit (`git rev-parse --short HEAD`) so the
+notes say what state they describe.
 
 ## Steps
 
-1. **Sync first**: `git -C "$VAULT" pull --rebase --quiet` (tolerate failure).
+1. **Sync**: `"$BRAIN" sync`.
 2. **Explore the repo thoroughly** before writing anything: README and docs,
    entry points, directory layout, major subsystems and how they interact, data
    flow, build/test/deploy setup, and any decision records. For a large repo,
    fan out Explore agents over subsystems instead of reading everything inline.
-3. **Write the notes** into the repo's area folder `"$VAULT/<slug>/"` — reuse an
-   existing area folder for this project if one exists (match loosely, e.g.
-   `PadelReplay/` for repo `padel-replay`):
+3. **Write the notes** into `$AREA`:
    - **Overview note** named after the repo (e.g. `PadelReplay.md`): purpose,
      tech stack, high-level architecture, and a linked map of the subsystem
      notes. Frontmatter:
@@ -54,10 +56,9 @@ say what state they describe.
      sharp edges. Don't transcribe code.
 4. **Weave it into the existing knowledge base** — the repo notes must join the
    graph, not sit beside it:
-   - Before writing each note, search the vault (`rg` over filenames and
-     content) for existing notes on related topics — techniques, architectures,
-     tools, other repos — and `[[wikilink]]` them wherever they're relevant to
-     this repo.
+   - Before writing each note, `"$BRAIN" search <terms>` for existing notes on
+     related topics — techniques, architectures, tools, other repos — and
+     `[[wikilink]]` them wherever they're relevant to this repo.
    - Where the repo is a meaningful example of something an existing topic note
      covers, also add a short line to that note (e.g. under "Seen in":
      `[[<Repo overview>]] — how it's applied there`) so knowledge accumulates on
@@ -66,9 +67,8 @@ say what state they describe.
    - Don't invent new general topic notes as part of ingest — dangling
      `[[links]]` are fine and mark topics worth writing up later.
 5. **Connect the graph**: link the overview note from `Home.md`.
-5. **Re-ingesting**: if the repo's area folder already has notes, update them in
+6. **Re-ingesting**: if the repo's area folder already has notes, update them in
    place (refresh `commit`/`ingested`, revise what changed, keep manually added
    content) — never create duplicates.
-6. **Commit and push**:
-   `git -C "$VAULT" add -A && git -C "$VAULT" commit -m "ingest <slug> @ <sha>" && git -C "$VAULT" push`.
-7. **Report**: list the notes created/updated, one line each.
+7. **Save**: `"$BRAIN" save "ingest <slug> @ <sha>"`.
+8. **Report**: list the notes created/updated, one line each.
