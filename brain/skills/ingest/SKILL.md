@@ -30,7 +30,9 @@ say what state they describe.
    entry points, directory layout, major subsystems and how they interact, data
    flow, build/test/deploy setup, and any decision records. For a large repo,
    fan out Explore agents over subsystems instead of reading everything inline.
-3. **Write the notes** under `"$VAULT/repos/<slug>/"`:
+3. **Write the notes** into the repo's area folder `"$VAULT/<slug>/"` — reuse an
+   existing area folder for this project if one exists (match loosely, e.g.
+   `PadelReplay/` for repo `padel-replay`):
    - **Overview note** named after the repo (e.g. `PadelReplay.md`): purpose,
      tech stack, high-level architecture, and a linked map of the subsystem
      notes. Frontmatter:
@@ -64,8 +66,8 @@ say what state they describe.
    - Don't invent new general topic notes as part of ingest — dangling
      `[[links]]` are fine and mark topics worth writing up later.
 5. **Connect the graph**: link the overview note from `Home.md`.
-5. **Re-ingesting**: if `repos/<slug>/` already exists, update the notes in place
-   (refresh `commit`/`ingested`, revise what changed, keep manually added
+5. **Re-ingesting**: if the repo's area folder already has notes, update them in
+   place (refresh `commit`/`ingested`, revise what changed, keep manually added
    content) — never create duplicates.
 6. **Commit and push**:
    `git -C "$VAULT" add -A && git -C "$VAULT" commit -m "ingest <slug> @ <sha>" && git -C "$VAULT" push`.

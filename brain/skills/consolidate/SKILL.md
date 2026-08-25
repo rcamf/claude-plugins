@@ -26,8 +26,11 @@ run `/brain:init`.
 4. **Promote durable knowledge** into the main vault:
    - Decisions and their reasons, lessons learned, gotchas, useful references,
      facts about projects/tools → update existing topic notes where they fit
-     (`rg` for them first), otherwise create new ones in the appropriate area
-     folder — never at the vault root unless the user explicitly asks. Add
+     (`rg` for them first), otherwise create new ones. **Default to the
+     session's repo area**: the session slug names the repo it worked in, so new
+     notes go into that project's area folder (e.g. `PadelReplay/`), created if
+     needed. Put a note elsewhere only when it is clearly not about that repo.
+     Never write at the vault root unless the user explicitly asks. Add
      `[[wikilinks]]`, use absolute dates, link new areas from `Home.md`.
    - Leave behind the ephemeral: step-by-step narration, dead ends (unless the
      dead end itself is a lesson), stale TODO churn.
