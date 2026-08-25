@@ -50,7 +50,20 @@ say what state they describe.
      each other and to any existing vault notes on related topics.
    - Capture what the code can't say quickly: why it's built this way, invariants,
      sharp edges. Don't transcribe code.
-4. **Connect the graph**: link the overview note from `Home.md`.
+4. **Weave it into the existing knowledge base** — the repo notes must join the
+   graph, not sit beside it:
+   - Before writing each note, search the vault (`rg` over filenames and
+     content) for existing notes on related topics — techniques, architectures,
+     tools, other repos — and `[[wikilink]]` them wherever they're relevant to
+     this repo.
+   - Where the repo is a meaningful example of something an existing topic note
+     covers, also add a short line to that note (e.g. under "Seen in":
+     `[[<Repo overview>]] — how it's applied there`) so knowledge accumulates on
+     the topic side too. Extend existing notes; never duplicate their content
+     into the repo notes.
+   - Don't invent new general topic notes as part of ingest — dangling
+     `[[links]]` are fine and mark topics worth writing up later.
+5. **Connect the graph**: link the overview note from `Home.md`.
 5. **Re-ingesting**: if `repos/<slug>/` already exists, update the notes in place
    (refresh `commit`/`ingested`, revise what changed, keep manually added
    content) — never create duplicates.
