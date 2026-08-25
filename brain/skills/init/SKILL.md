@@ -54,10 +54,16 @@ Use only plain `git` — do not assume `gh` or any other forge CLI is installed.
      settings (use python3/jq for the JSON merge, and create the file with just
      that env block if missing). If the user runs multiple Claude config dirs,
      offer to update each.
-4. **Verify** with the plugin's helper CLI (`scripts/brain.sh` at the plugin
+4. **Offer automatic session mirroring**: the plugin ships a SessionStart hook
+   that reminds every session to mirror its working docs into the vault
+   (`/brain:session`). It is OFF by default — ask the user whether to enable
+   it. If yes, persist `BRAIN_SESSION_AUTOSTART=1` exactly like `BRAIN_VAULT`
+   (shell profile + Claude settings `env`); if no, do nothing and mention it
+   can be enabled later the same way.
+5. **Verify** with the plugin's helper CLI (`scripts/brain.sh` at the plugin
    root, two directories above this skill's base directory):
    `BRAIN_VAULT="<absolute path>" <plugin root>/scripts/brain.sh vault` must
    print the path, and the path must contain `CLAUDE.md` and `Home.md`.
-5. Report: the vault path, its remote (or that none is set), and suggest opening
+6. Report: the vault path, its remote (or that none is set), and suggest opening
    the folder as a vault in Obsidian. Note that `BRAIN_VAULT` takes effect in new
    shells/sessions.

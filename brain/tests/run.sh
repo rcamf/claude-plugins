@@ -99,6 +99,13 @@ eq "update: first merge succeeds (unrelated histories)" 0 "$?"
 "$BRAIN" update >/dev/null 2>&1
 eq "update: re-run is clean (shared history)" 0 "$?"
 
+# --- session-start hook ------------------------------------------------------
+HOOK="$HERE/../scripts/session-start-hook.sh"
+eq "hook: silent when not opted in" "" "$(cd "$P" && BRAIN_SESSION_AUTOSTART= "$HOOK")"
+eq "hook: silent when opted out" "" "$(cd "$P" && BRAIN_SESSION_AUTOSTART=0 "$HOOK")"
+eq "hook: silent when vault invalid" "" "$(cd "$P" && BRAIN_SESSION_AUTOSTART=1 BRAIN_VAULT="$TMP/nope" "$HOOK")"
+has "hook: opted in emits standing rule with slug" "sessions/proj-feat-x/" "$(cd "$P" && BRAIN_SESSION_AUTOSTART=1 "$HOOK")"
+
 # --- summary -----------------------------------------------------------------
 echo
 echo "passed: $pass, failed: $fail"

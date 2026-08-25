@@ -1,0 +1,15 @@
+{
+  "description": "Opt-in session-start reminder to mirror working docs into the brAIn vault (enable with BRAIN_SESSION_AUTOSTART=1)",
+  "hooks": {
+    "SessionStart": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "${CLAUDE_PLUGIN_ROOT}/scripts/session-start-hook.sh"
+          }
+        ]
+      }
+    ]
+  }
+}
