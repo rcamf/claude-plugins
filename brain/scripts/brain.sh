@@ -22,7 +22,7 @@ case "$cmd" in
 
   sync)
     V=$(vault)
-    if git -C "$V" pull --rebase --autostash --quiet 2>/dev/null; then
+    if git -C "$V" pull --rebase --autostash --quiet >/dev/null 2>&1; then
       echo "synced"
     else
       echo "sync failed (offline, or another session mid-change) — working locally"
@@ -47,6 +47,8 @@ case "$cmd" in
     V=$(vault)
     root=$(repo_root "${1:-.}")
     name=$(basename "$root")
+    # A repo named like a structural folder must not claim that folder.
+    case "$name" in sessions|templates|attachments) name="$name (repo)" ;; esac
     want=$(norm "$name")
     for d in "$V"/*/; do
       [ -d "$d" ] || continue
@@ -97,7 +99,7 @@ case "$cmd" in
     # Merge template repo updates into the vault (first merge bridges histories).
     V=$(vault)
     git -C "$V" remote get-url template >/dev/null 2>&1 || \
-      git -C "$V" remote add template https://github.com/rcamf/brAIn-template
+      git -C "$V" remote add template "${BRAIN_TEMPLATE_URL:-https://github.com/rcamf/brAIn-template}"
     git -C "$V" fetch -q template
     if git -C "$V" merge-base HEAD template/main >/dev/null 2>&1; then
       git -C "$V" merge template/main -m "Merge brAIn template updates"
