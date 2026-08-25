@@ -26,8 +26,9 @@ run `/brain:init`.
 4. **Promote durable knowledge** into the main vault:
    - Decisions and their reasons, lessons learned, gotchas, useful references,
      facts about projects/tools → update existing topic notes where they fit
-     (`rg` for them first), otherwise create new ones. Add `[[wikilinks]]`, use
-     absolute dates, link new top-level areas from `Home.md`.
+     (`rg` for them first), otherwise create new ones in the appropriate area
+     folder — never at the vault root unless the user explicitly asks. Add
+     `[[wikilinks]]`, use absolute dates, link new areas from `Home.md`.
    - Leave behind the ephemeral: step-by-step narration, dead ends (unless the
      dead end itself is a lesson), stale TODO churn.
 5. **Archive the session folder**: `mkdir -p "$VAULT/sessions/archive" && git -C "$VAULT" mv "sessions/<slug>" "sessions/archive/<slug>"`.

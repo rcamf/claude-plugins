@@ -24,6 +24,9 @@ run `/brain:init`. Notes are plain Markdown, one topic per file, linked with
    existing note over creating a near-duplicate.
 3. **Write the note**:
    - New topic → new file, filename is the title: `Topic name.md`.
+   - Place it in the area folder that fits (e.g. `PadelReplay/`, `Infra/`),
+     creating a new area folder for a genuinely new area. Never save a note at
+     the vault root unless the user explicitly asks.
    - Add `[[wikilinks]]` to related existing notes; links to not-yet-existing notes
      are fine and encouraged.
    - Use absolute dates (e.g. 2026-08-25), never relative ones.
