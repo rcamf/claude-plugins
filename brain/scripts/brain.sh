@@ -42,6 +42,13 @@ case "$cmd" in
     case "$branch" in ""|main|master) ;; *) slug="$slug-$branch" ;; esac
     printf '%s\n' "$slug" | tr '/ ' '--' ;;
 
+  ref)
+    # Provenance for the repo at [path]: repo@branch#shortsha. Silent if not a repo.
+    root=$(git -C "${1:-.}" rev-parse --show-toplevel 2>/dev/null) || exit 0
+    sha=$(git -C "$root" rev-parse --short HEAD 2>/dev/null || true)
+    branch=$(git -C "$root" branch --show-current 2>/dev/null || true)
+    printf '%s@%s#%s\n' "$(basename "$root")" "${branch:-detached}" "${sha:-none}" ;;
+
   area)
     # Resolve (or create) the area folder for the repo at [path]; loose name match.
     V=$(vault)
@@ -114,6 +121,7 @@ usage: brain.sh <command>
   sync                pull --rebase the vault (tolerates offline)
   save "<msg>"        add/commit/push everything in the vault (tolerates offline)
   slug [path]         session/repo slug for a working directory
+  ref [path]          provenance of a working directory: repo@branch#shortsha
   area [path]         resolve or create the repo's area folder; print its path
   session-dir [path]  ensure sessions/<slug>/ with log.md; print its path
   search <term>...    list notes matching terms (filename or content)

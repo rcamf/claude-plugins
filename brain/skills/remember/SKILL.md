@@ -34,7 +34,23 @@ Read the vault's `CLAUDE.md` if you need the full conventions.
    - Add `[[wikilinks]]` to related existing notes; links to not-yet-existing
      notes are fine and encouraged.
    - Use absolute dates (e.g. 2026-08-25), never relative ones.
-   - Quick unstructured capture with no obvious home → append to `Inbox.md`.
+   - **Always record provenance** when the knowledge stems from work in a repo:
+     `"$BRAIN" ref` prints `repo@branch#sha` for the current repo. On a NEW
+     note, put it in the frontmatter:
+
+     ```markdown
+     ---
+     source: <repo>
+     branch: <branch>
+     commit: <short sha>
+     created: <YYYY-MM-DD>
+     ---
+     ```
+
+     When APPENDING to an existing note, end the entry with `(repo@branch#sha)`
+     instead. Only omit provenance when there is genuinely no repo context.
+   - Quick unstructured capture with no obvious home → append to `Inbox.md`
+     (dated, with the same inline provenance).
 4. **Keep the graph connected**: if you created a new area folder, link it from
    `Home.md`.
 5. **Save**: `"$BRAIN" save "<what changed>"`.

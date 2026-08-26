@@ -30,7 +30,9 @@ seeds `log.md` with the frontmatter that feeds the vault's `Sessions.base`.
    - Scratch/planning docs created in the worktree → copy them into `$DIR`,
      same filename; re-copy whenever they change meaningfully.
    - Running notes, decisions, findings with no worktree file → append dated
-     entries to `$DIR/log.md`.
+     entries to `$DIR/log.md`, each ending with the current provenance —
+     `"$BRAIN" ref` prints `repo@branch#sha` — so every entry records the
+     commit it was true of.
    - Wikilink to vault notes (`[[Topic]]`) where relevant — that's what makes
      later consolidation easy.
 3. **Do NOT promote anything into the main vault.** Session folders are working

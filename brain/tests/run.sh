@@ -48,6 +48,12 @@ eq "slug: feature branch appended, / flattened" "proj-feat-x" "$("$BRAIN" slug "
 mkdir -p "$TMP/plain dir"
 eq "slug: non-git dir -> basename, space flattened" "plain-dir" "$("$BRAIN" slug "$TMP/plain dir")"
 
+# --- ref ---------------------------------------------------------------------
+has "ref: repo@branch#sha format" "proj@feat/x#" "$("$BRAIN" ref "$P")"
+sha=$(git -C "$P" rev-parse --short HEAD)
+eq "ref: sha matches HEAD" "proj@feat/x#$sha" "$("$BRAIN" ref "$P")"
+eq "ref: non-git dir prints nothing" "" "$("$BRAIN" ref "$TMP/plain dir")"
+
 # --- area --------------------------------------------------------------------
 mkdir -p "$TMP/padel-replay"
 eq "area: loose match finds PadelReplay/" "$V/PadelReplay" "$("$BRAIN" area "$TMP/padel-replay")"

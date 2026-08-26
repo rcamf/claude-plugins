@@ -35,6 +35,12 @@ If `vault` fails, stop and relay its message (the fix is `/brain:init`).
      (or creates) the project's area folder, and new notes go there. Put a note
      elsewhere only when it is clearly not about that repo. Never write at the
      vault root unless the user explicitly asks.
+   - **Always record provenance**: promoted knowledge carries the session's
+     repo/branch (from the `log.md` frontmatter) and commit — prefer the
+     `(repo@branch#sha)` refs already inline in the session's log entries; for
+     material without one, `"$BRAIN" ref <repo path>` gives the repo's current
+     ref. New notes carry it as frontmatter (`source`/`branch`/`commit`);
+     appended entries end with the inline `(repo@branch#sha)` form.
    - Add `[[wikilinks]]`, use absolute dates, link new areas from `Home.md`.
    - Leave behind the ephemeral: step-by-step narration, dead ends (unless the
      dead end itself is a lesson), stale TODO churn.

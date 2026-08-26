@@ -43,9 +43,13 @@ notes say what state they describe.
      ---
      tags: [repo]
      path: <absolute local path>
+     branch: <branch>
      commit: <short sha>
      ingested: <YYYY-MM-DD>
      ---
+
+     (`"$BRAIN" ref [path]` prints `repo@branch#sha`; subsystem notes carry the
+     same `branch`/`commit`/`ingested` frontmatter.)
      ```
 
    - **One note per major subsystem or key concept** (aim for the handful that
